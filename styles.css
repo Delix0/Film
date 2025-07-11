@@ -1,0 +1,309 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-theme {
+    background-color: #0a0e1a;
+    color: #e6e9ef;
+}
+
+body.light-theme {
+    background-color: #f5f7fa;
+    color: #1a1c22;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: background-color 0.3s;
+}
+
+body.dark-theme .container {
+    background-color: #1c2526;
+}
+
+body.light-theme .container {
+    background-color: #ffffff;
+}
+
+.theme-toggle {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+#themeToggle {
+    background: linear-gradient(45deg, #1e90ff, #00b4d8);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+
+#themeToggle:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #00b4d8, #1e90ff);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5rem;
+    font-weight: 700;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 12px;
+}
+
+.search-group {
+    margin-bottom: 20px;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.95rem;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+}
+
+body.dark-theme input,
+body.dark-theme select {
+    background-color: #2e3641;
+    color: #e6e9ef;
+}
+
+body.light-theme input,
+body.light-theme select {
+    background-color: #e9ecef;
+    color: #1a1c22;
+}
+
+body.dark-theme input:hover,
+body.dark-theme select:hover {
+    background-color: #39424e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.light-theme input:hover,
+body.light-theme select:hover {
+    background-color: #dfe3e8;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+input {
+    cursor: text;
+}
+
+button {
+    background: linear-gradient(45deg, #6b48ff, #8b5cf6);
+    color: #fff;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+button:disabled {
+    background: #4b5563;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#result {
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 12px;
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+body.dark-theme #result {
+    background-color: #2e3641;
+}
+
+body.light-theme #result {
+    background-color: #e9ecef;
+}
+
+#result.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#result h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+#result p {
+    margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+#result .related-movies {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #4b5563;
+}
+
+body.light-theme #result .related-movies {
+    border-top: 1px solid #d1d5db;
+}
+
+#result .related-movies h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+#result .related-movies ul {
+    list-style: none;
+}
+
+#result .related-movies li {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+#shareBtn {
+    background: linear-gradient(45deg, #1e90ff, #00b4d8);
+}
+
+#shareBtn:hover {
+    transform: translateY(-2px);
+}
+
+#addToWatched {
+    background: linear-gradient(45deg, #2f855a, #38a169);
+}
+
+#addToWatched:hover {
+    transform: translateY(-2px);
+}
+
+textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    margin-top: 10px;
+    resize: vertical;
+    font-size: 0.95rem;
+}
+
+body.dark-theme textarea {
+    background-color: #2e3641;
+    color: #e6e9ef;
+}
+
+body.light-theme textarea {
+    background-color: #e9ecef;
+    color: #1a1c22;
+}
+
+.watched-movies {
+    margin-top: 40px;
+}
+
+.watched-movies h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+}
+
+#watchedList {
+    list-style: none;
+}
+
+#watchedList li {
+    background-color: #2e3641;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+body.light-theme #watchedList li {
+    background-color: #e9ecef;
+}
+
+#watchedList button {
+    background: linear-gradient(45deg, #dc2626, #ef4444);
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+#watchedList button:hover {
+    transform: translateY(-2px);
+}
+
+.watched-note {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+body.light-theme .watched-note {
+    color: #6b7280;
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    input, select, button, textarea {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    #result h2 {
+        font-size: 1.6rem;
+    }
+
+    .watched-movies h2 {
+        font-size: 1.4rem;
+    }
+}
