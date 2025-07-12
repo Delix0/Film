@@ -57,6 +57,22 @@ body.light-theme .container {
     transition: transform 0.2s, background 0.3s;
 }
 
+#resetBtn {
+    background: linear-gradient(45deg, #ff6b6b, #ff4757);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.3s;
+}
+
+#resetBtn:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(45deg, #ff4757, #ff6b6b);
+}
+
 #themeToggle:hover {
     transform: translateY(-2px);
     background: linear-gradient(45deg, #00b4d8, #1e90ff);
