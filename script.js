@@ -2353,225 +2353,78 @@ const movies = [
     }
 ]
 
-let lastFilteredMovies = [];
-let currentMovie = null;
+let lastFilteredMovies = []; 
+watchedMovies.push({ title, note });
+localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
+updateWatchedList();
 
-function findMovie() {
-    const genre = document.getElementById('genre').value;
-    const year = document.getElementById('year').value;
-    const duration = document.getElementById('duration').value;
-    const rating = document.getElementById('rating').value;
-    const language = document.getElementById('language').value;
-    const search = document.getElementById('search').value.toLowerCase();
-    const sort = document.getElementById('sort').value;
-
-    let filteredMovies = movies;
-
-    if (search) {
-        filteredMovies = filteredMovies.filter(movie => 
-            movie.title.toLowerCase().includes(search) || 
-            movie.description.toLowerCase().includes(search) ||
-            movie.director.toLowerCase().includes(search)
-        );
-    }
-
-    // Исправленное условие: проверяем значения по умолчанию
-    const noFilters =
-        !search &&
-        (!genre || genre === '') &&
-        (!year || year === 'любое') &&
-        (!duration || duration === 'любая') &&
-        (!rating || rating === 'любое') &&
-        (!language || language === 'любой');
-
-    if (noFilters) {
-        const resultDiv = document.getElementById('result');
-        resultDiv.style.display = 'block';
-        resultDiv.classList.add('show');
-        resultDiv.innerHTML = '<p>Выберите фильтры или введите запрос!</p>';
-        document.getElementById('anotherMovie').style.display = 'none';
-        return;
-    }
-
-    if (genre) {
-        filteredMovies = filteredMovies.filter(movie => movie.genre === genre);
-    }
-    if (year && year !== 'любое') {
-        filteredMovies = filteredMovies.filter(movie => movie.yearRange === year);
-    }
-    if (duration && duration !== 'любая') {
-        filteredMovies = filteredMovies.filter(movie => movie.duration === duration);
-    }
-    if (rating && rating !== 'любое') {
-        const minRating = rating === '7+' ? 7 : 8;
-        filteredMovies = filteredMovies.filter(movie => movie.rating >= minRating);
-    }
-    if (language && language !== 'любой') {
-        filteredMovies = filteredMovies.filter(movie => movie.language === language);
-    }
-
-    if (sort === 'rating') {
-        filteredMovies.sort((a, b) => b.rating - a.rating);
-    } else if (sort === 'year') {
-        filteredMovies.sort((a, b) => b.year - a.year);
-    } else if (sort === 'title') {
-        filteredMovies.sort((a, b) => a.title.localeCompare(b.title));
-    } else {
-        filteredMovies.sort(() => Math.random() - 0.5);
-    }
-
-    lastFilteredMovies = filteredMovies;
-
-    const resultDiv = document.getElementById('result');
-    const anotherMovieBtn = document.getElementById('anotherMovie');
-    if (filteredMovies.length === 0) {
-        resultDiv.style.display = 'block';
-        resultDiv.classList.add('show');
-        resultDiv.innerHTML = '<p>Фильмы не найдены. Попробуйте другие фильтры!</p>';
-        anotherMovieBtn.style.display = 'none';
-        return;
-    }
-
-    const selectedMovie = sort === 'random' 
-        ? filteredMovies[Math.floor(Math.random() * filteredMovies.length)]
-        : filteredMovies[0];
-    currentMovie = selectedMovie;
-    displayMovie(selectedMovie);
-    anotherMovieBtn.style.display = filteredMovies.length > 1 ? 'block' : 'none';
-}
-
-function findAnotherMovie() {
-    if (lastFilteredMovies.length === 0) return;
-
-    const resultDiv = document.getElementById('result');
-    const anotherMovieBtn = document.getElementById('anotherMovie');
-    const sort = document.getElementById('sort').value;
-
-    let filteredMovies = [...lastFilteredMovies];
-    if (sort === 'rating') {
-        filteredMovies.sort((a, b) => b.rating - a.rating);
-    } else if (sort === 'year') {
-        filteredMovies.sort((a, b) => b.year - a.year);
-    } else if (sort === 'title') {
-        filteredMovies.sort((a, b) => a.title.localeCompare(b.title));
-    } else {
-        filteredMovies.sort(() => Math.random() - 0.5);
-    }
-
-    const selectedMovie = filteredMovies[0];
-    currentMovie = selectedMovie;
-    displayMovie(selectedMovie);
-    anotherMovieBtn.style.display = filteredMovies.length > 1 ? 'block' : 'none';
-}
-
-function surpriseMe() {
-    const randomMovie = movies[Math.floor(Math.random() * movies.length)];
-    currentMovie = randomMovie;
-    displayMovie(randomMovie);
-    document.getElementById('anotherMovie').style.display = 'none';
-}
-
-function displayMovie(movie) {
-    const resultDiv = document.getElementById('result');
-    const relatedMovies = movie.related
-        .filter(title => movies.some(m => m.title === title))
-        .map(title => `<li>${title}</li>`)
-        .join('');
-    resultDiv.style.display = 'block';
-    resultDiv.classList.remove('show');
-    setTimeout(() => resultDiv.classList.add('show'), 10);
-    resultDiv.innerHTML = `
-        <h2>${movie.title}</h2>
-        <p><strong>Жанр:</strong> ${movie.genre}</p>
-        <p><strong>Год:</strong> ${movie.year}</p>
-        <p><strong>Длительность:</strong> ${movie.duration === 'короткие' ? '<90 мин' : movie.duration === 'средние' ? '90–120 мин' : '>120 мин'}</p>
-        <p><strong>Рейтинг IMDb:</strong> ${movie.rating}</p>
-        <p><strong>Язык:</strong> ${movie.language}</p>
-        <p><strong>Режиссёр:</strong> ${movie.director}</p>
-        <p><strong>Описание:</strong> ${movie.description}</p>
-        ${relatedMovies ? `
-            <div class="related-movies">
-                <h3>Похожие фильмы или серия:</h3>
-                <ul>${relatedMovies}</ul>
-            </div>
-        ` : ''}
-        <textarea id="noteInput" placeholder="Добавьте заметку о фильме"></textarea>
-        <button id="addToWatched" onclick="addToWatched('${movie.title}')">Добавить в просмотренные</button>
-        <button id="shareBtn" onclick="shareMovie('${movie.title}')">Поделиться</button>
-    `;
-}
-
-function addToWatched(title) {
-    const note = document.getElementById('noteInput').value;
-    let watchedMovies = JSON.parse(localStorage.getItem('watchedMovies') || '[]');
-    if (!watchedMovies.some(movie => movie.title === title)) {
-        watchedMovies.push({ title, note });
-        localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
-        updateWatchedList();
-    }
-}
 
 function removeFromWatched(title) {
-    let watchedMovies = JSON.parse(localStorage.getItem('watchedMovies') || '[]');
-    watchedMovies = watchedMovies.filter(movie => movie.title !== title);
-    localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
-    updateWatchedList();
+let watchedMovies = JSON.parse(localStorage.getItem('watchedMovies') || '[]');
+watchedMovies = watchedMovies.filter(movie => movie.title !== title);
+localStorage.setItem('watchedMovies', JSON.stringify(watchedMovies));
+updateWatchedList();
 }
+
 
 function updateWatchedList() {
-    const watchedList = document.getElementById('watchedList');
-    const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies') || '[]');
-    watchedList.innerHTML = watchedMovies.length === 0
-        ? '<p>Список просмотренных пуст</p>'
-        : watchedMovies.map(movie => `
-            <li>
-                ${movie.title}
-                ${movie.note ? `<p class="watched-note">${movie.note}</p>` : ''}
-                <button onclick="removeFromWatched('${movie.title}')">Удалить</button>
-            </li>
-        `).join('');
+const watchedList = document.getElementById('watchedList');
+const watchedMovies = JSON.parse(localStorage.getItem('watchedMovies') || '[]');
+watchedList.innerHTML = watchedMovies.length === 0
+? '<p>Список просмотренных пуст</p>'
+: watchedMovies.map(movie => `
+<li>
+${movie.title}
+${movie.note ? `<p class="watched-note">${movie.note}</p>` : ''}
+<button onclick="removeFromWatched('${movie.title}')">Удалить</button>
+</li>
+`).join('');
 }
+
 
 function shareMovie(title) {
-    const text = `${title}`;
-    navigator.clipboard.writeText(text)
-        .then(() => alert('Название фильма скопировано в буфер обмена!'))
-        .catch(() => alert('Ошибка при копировании.'));
+navigator.clipboard.writeText(title)
+.then(() => alert('Название фильма скопировано в буфер обмена!'))
+.catch(() => alert('Ошибка при копировании.'));
 }
+
 
 function resetFilters() {
-    document.getElementById('search').value = '';
-    document.getElementById('genre').selectedIndex = 0;
-    document.getElementById('year').selectedIndex = 0;
-    document.getElementById('duration').selectedIndex = 0;
-    document.getElementById('rating').selectedIndex = 0;
-    document.getElementById('language').selectedIndex = 0;
-    document.getElementById('sort').selectedIndex = 0;
-    document.getElementById('result').innerHTML = '';
-    document.getElementById('anotherMovie').style.display = 'none';
+document.getElementById('search').value = '';
+document.getElementById('genre').selectedIndex = 0;
+document.getElementById('year').selectedIndex = 0;
+document.getElementById('duration').selectedIndex = 0;
+document.getElementById('rating').selectedIndex = 0;
+document.getElementById('language').selectedIndex = 0;
+document.getElementById('sort').selectedIndex = 0;
+document.getElementById('result').innerHTML = '';
+document.getElementById('anotherMovie').style.display = 'none';
 }
+
 
 function toggleTheme() {
-    const body = document.body;
-    const themeToggleBtn = document.getElementById('themeToggle');
-    if (body.classList.contains('dark-theme')) {
-        body.classList.remove('dark-theme');
-        body.classList.add('light-theme');
-        themeToggleBtn.textContent = 'Тёмная тема';
-    } else {
-        body.classList.remove('light-theme');
-        body.classList.add('dark-theme');
-        themeToggleBtn.textContent = 'Светлая тема';
-    }
-    localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+const body = document.body;
+const themeToggleBtn = document.getElementById('themeToggle');
+if (body.classList.contains('dark-theme')) {
+body.classList.remove('dark-theme');
+body.classList.add('light-theme');
+themeToggleBtn.textContent = 'Тёмная тема';
+} else {
+body.classList.remove('light-theme');
+body.classList.add('dark-theme');
+themeToggleBtn.textContent = 'Светлая тема';
+}
+localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
 }
 
+
 document.addEventListener('DOMContentLoaded', () => {
-    updateWatchedList();
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    const body = document.body;
-    const themeToggleBtn = document.getElementById('themeToggle');
-    body.classList.remove('dark-theme', 'light-theme');
-    body.classList.add(`${savedTheme}-theme`);
-    themeToggleBtn.textContent = savedTheme === 'dark' ? 'Светлая тема' : 'Тёмная тема';
+updateWatchedList();
+const savedTheme = localStorage.getItem('theme') || 'dark';
+const body = document.body;
+const themeToggleBtn = document.getElementById('themeToggle');
+body.classList.remove('dark-theme', 'light-theme');
+body.classList.add(`${savedTheme}-theme`);
+themeToggleBtn.textContent = savedTheme === 'dark' ? 'Светлая тема' : 'Тёмная тема';
 });
+
