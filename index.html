@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Что посмотреть?</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+    <div class="container">
+        <h1>Что посмотреть?</h1>
+        <div class="theme-toggle">
+            <button id="themeToggle" onclick="toggleTheme()">Светлая тема</button>
+            <button id="resetBtn" onclick="resetFilters()">Сбросить фильтры</button>
+        </div>
+
+        <div class="form-group search-group">
+            <input type="text" id="search" placeholder="Поиск по названию или описанию">
+        </div>
+
+        <div class="filters">
+            <div class="form-group">
+                <select id="genre">
+                    <option value="">Выберите жанр</option>
+                    <option value="комедия">Комедия</option>
+                    <option value="драма">Драма</option>
+                    <option value="ужасы">Ужасы</option>
+                    <option value="фантастика">Фантастика</option>
+                    <option value="боевик">Боевик</option>
+                    <option value="триллер">Триллер</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="year">
+                    <option value="">Выберите год</option>
+                    <option value="до 1980">До 1980</option>
+                    <option value="80-е">80-е</option>
+                    <option value="90-е">90-е</option>
+                    <option value="2000-е">2000-е</option>
+                    <option value="2010+">2010+</option>
+                    <option value="любое">Любое</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="duration">
+                    <option value="">Выберите длительность</option>
+                    <option value="короткие">Короткие (<90 мин)</option>
+                    <option value="средние">Средние (90–120 мин)</option>
+                    <option value="длинные">Длинные (>120 мин)</option>
+                    <option value="любая">Любая</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="rating">
+                    <option value="">Выберите рейтинг</option>
+                    <option value="7+">Выше 7</option>
+                    <option value="8+">Выше 8</option>
+                    <option value="любое">Любое</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="language">
+                    <option value="">Выберите язык</option>
+                    <option value="английский">Английский</option>
+                    <option value="русский">Русский</option>
+                    <option value="другие">Другие</option>
+                    <option value="любой">Любой</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select id="sort">
+                    <option value="random">Случайно</option>
+                    <option value="rating">По рейтингу (убывание)</option>
+                    <option value="year">По году (убывание)</option>
+                    <option value="title">По алфавиту</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="button-group">
+    <button id="findBtn" onclick="findMovie()">Найти фильм</button>
+    <button onclick="surpriseMe()">Удиви меня!</button>
+    <button id="anotherMovie" onclick="findAnotherMovie()" style="display: none;">Показать ещё один фильм</button>
+</div>
+        <div id="result"></div>
+
+        <div class="watched-movies">
+            <h2>Просмотренные фильмы</h2>
+            <ul id="watchedList"></ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
